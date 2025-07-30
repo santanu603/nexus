@@ -1,14 +1,46 @@
 version: 0.2
 
+env:
+  variables:
+    S3_BUCKET: "nexus-0125"            # ✅ Replace with your bucket name
+    CLOUDFRONT_DIST_ID: "E2F4JBUZRKI8U0"  # ❌ Optional – set only if using CloudFront
+    INVALIDATE_CF: "true"                       # ❌ Set to "false" to skip invalidation
+
 phases:
   install:
+    runtime-versions:
+      nodejs: 18 # Only needed if your site uses Node (React, Vue, etc.)
     commands:
-      - echo Installing dependencies
-      - npm install  # or pip install -r requirements.txt
+      - echo Installing...
+      # Uncomment below if you use a build system like React/Vite
+      # - npm ci
+
+  pre_build:
+    commands:
+      - echo Preparing build...
+
   build:
     commands:
       - echo Build started on `date`
-      - npm run build  # only if needed
+      # Uncomment below for React/Vite/Next.js/etc.
+      # - npm run build
+
+  post_build:
+    commands:
+      - echo Build completed.
+      - echo Syncing to S3...
+      # If using a build folder (e.g., React builds to `dist` or `build`)
+      # - aws s3 sync dist/ s3://$S3_BUCKET --delete
+      - aws s3 sync . s3://$S3_BUCKET --delete
+      - |
+        if [ "$INVALIDATE_CF" = "true" ]; then
+          echo "Invalidating CloudFront..."
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DIST_ID --paths "/*"
+        else
+          echo "Skipping CloudFront invalidation"
+        fi
+
 artifacts:
   files:
     - '**/*'
+  discard-paths: no
