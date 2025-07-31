@@ -1,10 +1,10 @@
 {
-  "name": "my-node-app",
+  "name": "static-html-eb-app",
   "version": "1.0.0",
-  "description": "A simple Node.js app for Elastic Beanstalk",
-  "main": "index.html",
+  "description": "Static HTML site served with Express on Elastic Beanstalk",
+  "main": "server.js",
   "scripts": {
-    "start": "index.html"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2"
