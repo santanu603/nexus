@@ -2,10 +2,10 @@
 FROM nginx:alpine
 
 # Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /var/www/html/*
 
 # Copy your website files to nginx html directory
-COPY . /usr/share/nginx/html
+COPY . /var/www/html/
 
 # Expose port 80
 EXPOSE 80
