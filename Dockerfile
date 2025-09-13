@@ -3,10 +3,10 @@ FROM quay.io/centos/centos:stream9
 
 
 # Remove default welcome page
-RUN rm -f /var/www/html/*
+RUN rm -rf /var/www/html/*
 
 # Copy your site files
-COPY ./var/www/html/
+COPY . /var/www/html/
 
 # Set correct permissions
 RUN chown -R apache:apache /var/www/html && \
