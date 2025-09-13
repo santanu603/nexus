@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker stop static-html || true && docker rm static-html || true'
-                sh 'docker run -d -p 8080:80 --name static-html $IMAGE_NAME:$BUILD_NUMBER'
+                sh 'docker run -d -p 80:80 --name static-html $IMAGE_NAME:$BUILD_NUMBER'
             }
         }
     }
