@@ -1,14 +1,14 @@
-# Use Nginx as base image
-FROM nginx:alpine
+# Use CentOS Stream 9 as the base image
+FROM quay.io/centos/centos:stream9
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
 
-# Copy your website files to nginx html directory
-COPY . /usr/share/nginx/html
 
-# Expose port 80
+# Copy custom website files (optional)
+# Replace ./html with your local folder containing index.html
+COPY ./html/ /var/www/html/
+
+# Expose Apache default port
 EXPOSE 80
 
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Run Apache in foreground (required for container)
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
